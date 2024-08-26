@@ -1,13 +1,15 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Snackbar, {SnackbarCloseReason} from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import {useAppDispatch, useAppSelector} from "../../app/store";
+import {setErrorAC} from "../../app/app-reduser";
 
-export const  ErrorSnackbar = () => {
-    const [open, setOpen] = React.useState(false);
-
+export const ErrorSnackbar = () => {
+    const error = useAppSelector(state => state.app.error)
+    const dispatch = useAppDispatch();
     const handleClick = () => {
-        setOpen(true);
+
     };
 
     const handleClose = (
@@ -17,22 +19,22 @@ export const  ErrorSnackbar = () => {
         if (reason === 'clickaway') {
             return;
         }
-
-        setOpen(false);
+        dispatch(setErrorAC(null))
     };
 
     return (
         <div>
-            <Button onClick={handleClick}>Open Snackbar</Button>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{vertical: 'top',
-                horizontal:  'center' }}>
+            <Snackbar open={!!error} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+            }}>
                 <Alert
                     onClose={handleClose}
                     severity="success"
                     variant="filled"
-                    sx={{ width: '100%' }}
+                    sx={{width: '100%'}}
                 >
-                    This is a success Alert inside a Snackbar!
+                    {error}
                 </Alert>
             </Snackbar>
         </div>
