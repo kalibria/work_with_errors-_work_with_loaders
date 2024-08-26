@@ -68,14 +68,30 @@ export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: D
             dispatch(setStatusAC("succeeded"))
         })
 }
+
+enum RESULT_CODE {
+    SUCCESS,
+    ERROR,
+    ERROR_RECUPTCHA
+}
+
 export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setStatusAC("loading"))
     todolistsAPI.createTask(todolistId, title)
         .then(res => {
-            const task = res.data.data.item
-            const action = addTaskAC(task)
-            dispatch(action)
-            dispatch(setStatusAC("succeeded"))
+            if (res.data.resultCode === RESULT_CODE.SUCCESS) {
+                const task = res.data.data.item
+                const action = addTaskAC(task)
+                dispatch(action)
+                dispatch(setStatusAC("succeeded"))
+            } else {
+                if (res.data.messages.length) {
+                    //dispatch(setErrorAC(res.data.messages[0]))
+
+                } else {
+                    //dispatch(setErrorAC("Some error"))
+                }
+            }
         })
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
