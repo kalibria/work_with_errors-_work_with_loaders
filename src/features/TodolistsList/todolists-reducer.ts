@@ -1,6 +1,7 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {RequestStatusType, setStatusAC, SetStatusType} from "../../app/app-reduser";
+import {handleServerNetworkError} from "../../utils/utils";
 
 const initialState: Array<TodolistDomainType> = []
 
@@ -50,6 +51,12 @@ export const fetchTodolistsTC = () => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setStatusAC("succeeded"))
             })
+            .catch((e) => {
+                handleServerNetworkError(dispatch, e)
+            })
+            .finally(() => {
+                dispatch(setStatusAC("idle"))
+            })
     }
 }
 export const removeTodolistTC = (todolistId: string) => {
@@ -61,6 +68,12 @@ export const removeTodolistTC = (todolistId: string) => {
                 dispatch(removeTodolistAC(todolistId))
                 dispatch(setStatusAC("succeeded"))
             })
+            .catch((e) => {
+                handleServerNetworkError(dispatch, e)
+            })
+            .finally(() => {
+                dispatch(setStatusAC("idle"))
+            })
     }
 }
 export const addTodolistTC = (title: string) => {
@@ -71,6 +84,12 @@ export const addTodolistTC = (title: string) => {
                 dispatch(addTodolistAC(res.data.data.item))
                 dispatch(setStatusAC("succeeded"))
             })
+            .catch((e) => {
+                handleServerNetworkError(dispatch, e)
+            })
+            .finally(() => {
+                dispatch(setStatusAC("idle"))
+            })
     }
 }
 export const changeTodolistTitleTC = (id: string, title: string) => {
@@ -80,6 +99,12 @@ export const changeTodolistTitleTC = (id: string, title: string) => {
             .then((res) => {
                 dispatch(changeTodolistTitleAC(id, title))
                 dispatch(setStatusAC("succeeded"))
+            })
+            .catch((e) => {
+                handleServerNetworkError(dispatch, e)
+            })
+            .finally(() => {
+                dispatch(setStatusAC("idle"))
             })
     }
 }

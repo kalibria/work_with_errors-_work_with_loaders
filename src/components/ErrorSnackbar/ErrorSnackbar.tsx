@@ -30,7 +30,7 @@ export const ErrorSnackbar = () => {
             }}>
                 <Alert
                     onClose={handleClose}
-                    severity="success"
+                    severity="error"
                     variant="filled"
                     sx={{width: '100%'}}
                 >
